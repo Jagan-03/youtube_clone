@@ -1,0 +1,43 @@
+.videoMetadata {
+    padding : 10px 0;
+}
+.videoMetaData_top {
+    padding : 0 10px;
+}
+.videoMetaData_top_statistics {
+    width: 100%;
+    display: flex;
+    justify-content : space-between;
+    align-items : center;
+}
+.videoMetaData_top_statistics_likes > span {
+    margin-right: 5px;
+}
+.videoMetaData_channel {
+    width: 100%;
+    padding : 0 10px;
+    display: flex;
+    align-items : center;
+    justify-content : space-between;
+}
+.videoMetaData_channelInfo {
+    display: flex;
+    justify-content : space-between;
+    align-items : center;
+}
+.videoMetaData_channelInfo_avatar {
+    margin-right: 10px;
+}
+.videoMetaData_channelInfo_text {
+    padding: 0;
+    margin: 0;
+}
+.videoMetaData_description {
+    padding : 0 10px;
+}
+.videoMetaData_description_showMoreText {
+    text-decoration: none;
+    display: block;
+    margin: 1rem 0;
+    font-weight: 500;
+}

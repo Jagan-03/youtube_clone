@@ -1,0 +1,22 @@
+.videoSection {
+    background-color: #f9f9f9;
+    padding : 20px 20px;
+    padding-bottom : 0;
+}
+
+.videoSection > h2 {
+    margin-left: 5px;
+    margin-bottom: 20px;
+}
+
+.videoSection_videos {
+   display: flex; 
+   flex-wrap: wrap;
+   justify-content : center;
+}
+.videoSection_scroller {
+    text-align: center;
+}
+.videoSection_scroller::-webkit-scrollbar {
+    display: none;
+}

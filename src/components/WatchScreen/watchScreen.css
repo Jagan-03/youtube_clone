@@ -1,0 +1,29 @@
+.watchScreen {
+    display: flex;
+    flex : 1;
+    min-height: 100vh;
+}
+.watchScreen_player {
+    flex: 0.6;
+}
+.watchScreen_video {
+    height: 60vh;
+    margin-bottom: 2rem;
+}
+.watchScreen_relatedVideos {
+    flex: 0.4;
+}
+.watchScreen_relatedVideos_header {
+    margin: 15px;
+}
+@media (max-width : 1200px) {
+    .watchScreen {
+        flex-direction: column;
+    }
+    .watchScreen_player {
+        flex : 1;
+    }
+    .watchScreen_relatedVideos {
+        flex : 1;
+    }
+}
