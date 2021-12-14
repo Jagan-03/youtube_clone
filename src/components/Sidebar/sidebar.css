@@ -1,0 +1,75 @@
+.sidebar {
+    min-width: 200px;
+}
+.sidebar_inner {
+    position : sticky;
+    top : 80px;
+    width : 100%;
+    transition: .1s;
+}
+@media (max-width: 1100px) {
+    .sidebar_inner {
+        width : 60px;
+    }
+    .sidebar_title {
+        display: none;
+    }
+    .sidebar {
+        min-width: 60px;
+    }
+}
+@media (max-width: 900px) {
+    .sidebar_inner {
+        display : none;
+    }
+    .sidebar {
+        display : none;
+    }
+}
+.sidebar_inner_open {
+    display : block;
+}
+.sidebar_open {
+    display : block;
+}
+.sidebar_inner > hr {
+    height: 1px;
+    border: 0;
+    background-color: lightgray;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.sidebarRow {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+.sidebar_icon {
+    color: gray;
+    font-size: large !important;
+}
+.sidebar_title {
+    flex : 1;
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 20px;
+}
+.sidebarRow:hover {
+    background-color: lightgray;
+    cursor: pointer;
+}
+.sidebarRow:hover > .sidebar_icon {
+    color: red;
+}
+.sidebarRow:hover > .sidebar_title {
+    font-weight: bold;
+}
+.sidebarRow.selected {
+    background-color: lightgray;
+}
+.sidebarRow.selected > .sidebar_icon {
+    color : red;
+}
+.sidebarRow.selected > .sidebar_title {
+    font-weight: bold;
+}
