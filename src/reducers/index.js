@@ -2,7 +2,7 @@ import { combineReducers } from "redux";
 
 import store from "./store";
 import auth from "./auth";
-import { homeVideos, selectedVideo, relatedVideos, searchedVideos, subscribedChannels, channelVideos } from "./videos";
+import { homeVideos, selectedVideo, relatedVideos, searchedVideos, subscribedChannels, channelVideos, likedVideos, videoRating } from "./videos";
 import { channelDetails } from "./channel";
 import { comments } from "./comments";
 
@@ -15,6 +15,8 @@ export default combineReducers({
   searchedVideos,
   channelDetails,
   channelVideos,
+  likedVideos,
+  videoRating,
   comments,
   subscribedChannels
 });

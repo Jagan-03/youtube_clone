@@ -7,12 +7,18 @@ import ShowMoreText from "react-show-more-text";
 import { useDispatch, useSelector } from "react-redux";
 import { getChannelDetails, getSubcriptionStatus } from "../../actions/channel";
 import { IoMdThumbsUp, IoMdThumbsDown } from "react-icons/io";
+import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
+import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 
 import "./videoMetaData.css";
+import { rateVideo } from "../../actions/videos";
 
-const VideoMetaData = ({ video: { snippet, statistics }, videoId }) => {
+const VideoMetaData = ({ video: { snippet, statistics }, videoId, rating}) => {
   const { channelId, channelTitle, description, title, publishedAt } = snippet;
-  const { viewCount, likeCount, dislikeCount } = statistics;
+  const { viewCount, likeCount } = statistics;
+  console.log(rating);
 
   const dispatch = useDispatch();
 
@@ -27,6 +33,10 @@ const VideoMetaData = ({ video: { snippet, statistics }, videoId }) => {
     (state) => state.channelDetails.subscriptionStatus
   );
 
+    const rate = (data) => {
+      dispatch(rateVideo(videoId, data));
+    }
+
   return (
     <div className="videoMetaData">
       <div className="videoMetaData_top">
@@ -37,11 +47,11 @@ const VideoMetaData = ({ video: { snippet, statistics }, videoId }) => {
             {moment(publishedAt).fromNow()}
           </span>
           <div className="videoMetaData_top_statistics_likes">
-            <span>
-              <IoMdThumbsUp size={26} /> {numeral(likeCount).format("0.a")}
+            <span className="videoMetaData_top_statistics_likes_icon" onClick={() => rate(rating?.[0]?.rating ? rating[0].rating === "like" ? "none" : "like" : "none")}>
+              {rating?.[0]?.rating ? rating[0].rating === "like" ? <ThumbUpIcon size={26}/> : <ThumbUpAltOutlinedIcon size={26}/> : <></>} {numeral(likeCount).format("0.a")}
             </span>
-            <span>
-              <IoMdThumbsDown size={26} /> {numeral(dislikeCount).format("0.a")}
+            <span className="videoMetaData_top_statistics_likes_icon" onClick={() => rate(rating?.[0]?.rating ? rating[0].rating === "dislike" ? "none" : "dislike" : "none")}>
+              {rating?.[0]?.rating ? rating[0].rating === "dislike" ? <ThumbDownAltIcon size={26} /> : <ThumbDownOutlinedIcon size={26}/> : <></>} DISLIKE
             </span>
           </div>
         </div>

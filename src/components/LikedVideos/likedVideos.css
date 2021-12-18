@@ -1,0 +1,16 @@
+.likedVideos {
+    overflow-x: hidden;
+}
+.likedVideos_header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 70px;
+    border-bottom: 1px solid lightgray;
+}
+.likedVideos_videos {
+    padding : 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}

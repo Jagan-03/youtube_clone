@@ -89,6 +89,9 @@ export const subscribedChannels = (
   state = {
     loading: true,
     channels: [],
+    nextPageToken: "",
+    kind: null,
+    activeCategory: "All",
   },
   action
 ) => {
@@ -96,7 +99,17 @@ export const subscribedChannels = (
     case "SUBSCRIPTIONS_CHANNEL_REQUEST":
       return { ...state, loading: true };
     case "SUBSCRIPTIONS_CHANNEL_SUCCESS":
-      return { ...state, loading: false, channels: action.payload };
+      return {
+        ...state,
+        channels:
+          state.kind === action.payload.kind
+            ? [...state.channels, ...action.payload.channels]
+            : action.payload.channels,
+        loading: false,
+        kind: action.payload.kind,
+        nextPageToken: action.payload.nextPageToken,
+        activeCategory: action.payload.category,
+      };
     case "SUBSCRIPTIONS_CHANNEL_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -108,6 +121,9 @@ export const channelVideos = (
   state = {
     loading: true,
     videos: [],
+    nextPageToken: "",
+    playlistId: null,
+    activeCategory: "All",
   },
   action
 ) => {
@@ -115,10 +131,77 @@ export const channelVideos = (
     case "CHANNEL_VIDEOS_REQUEST":
       return { ...state, loading: true };
     case "CHANNEL_VIDEOS_SUCCESS":
-      return { ...state, loading: false, videos: action.payload };
+      if (action.payload.playlistId !== state.playlistId)
+        state.activeCategory = "All";
+      return {
+        ...state,
+        videos:
+          state.activeCategory === action.payload.category
+            ? [...state.videos, ...action.payload.videos]
+            : action.payload.videos,
+        loading: false,
+        playlistId: action.payload.playlistId,
+        nextPageToken: action.payload.nextPageToken,
+        activeCategory: action.payload.category,
+      };
     case "CHANNEL_VIDEOS_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
       return state;
   }
 };
+
+export const likedVideos = (
+  state = {
+    loading: true,
+    videos: [],
+    nextPageToken: "",
+    activeCategory: "All",
+    totalResults: 1,
+  },
+  action
+) => {
+  switch (action.type) {
+    case "LIKED_VIDEOS_REQUEST":
+      return { ...state, loading: true };
+    case "LIKED_VIDEOS_SUCCESS":
+      return {
+        ...state,
+        videos:
+          state.activeCategory === action.payload.category
+            ? [...state.videos, ...action.payload.videos]
+            : action.payload.videos,
+        loading: false,
+        nextPageToken: action.payload.nextPageToken,
+        activeCategory: action.payload.category,
+        totalResults: action.payload.totalResults,
+      };
+    case "LIKED_VIDEOS_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+
+export const videoRating = (
+  state = {
+    loading: true,
+    rating: [],
+  },
+  action
+) => {
+  switch (action.type) {
+    case "VIDEO_RATING_REQUEST":
+      return { ...state, loading: true };
+    case "VIDEO_RATING_SUCCESS":
+      return {
+        ...state,
+        rating: action.payload.rating,
+      };
+    case "VIDEO_RATING_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+

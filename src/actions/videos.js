@@ -85,14 +85,21 @@ export const getSubscribedChannels = () => async (dispatch, getState) => {
       params: {
         part: "snippet,contentDetails",
         mine: true,
+        maxResults: 10,
+        pageToken: getState().subscribedChannels.nextPageToken,
       },
       headers: {
         Authorization: `Bearer ${getState().auth.accessToken}`,
       },
     });
+    console.log(data);
     dispatch({
       type: "SUBSCRIPTIONS_CHANNEL_SUCCESS",
-      payload: data.items,
+      payload: {
+        channels: data.items,
+        nextPageToken: data.nextPageToken,
+        kind: data.kind,
+      },
     });
   } catch (error) {
     console.log(error);
@@ -100,11 +107,13 @@ export const getSubscribedChannels = () => async (dispatch, getState) => {
   }
 };
 
-export const getVideosByChannel = (id) => async (dispatch) => {
+export const getVideosByChannel = (id) => async (dispatch, getState) => {
   try {
     dispatch({ type: "CHANNEL_VIDEOS_REQUEST" });
     // 1. Getting the list of playlists
-    const { data : { items } } = await request("/channels", {
+    const {
+      data: { items },
+    } = await request("/channels", {
       params: {
         part: "contentDetails",
         id,
@@ -116,13 +125,94 @@ export const getVideosByChannel = (id) => async (dispatch) => {
       params: {
         part: "snippet,contentDetails",
         playlistId,
-        maxResults : 40
+        maxResults: 30,
+        pageToken: getState().channelVideos.nextPageToken,
       },
     });
     console.log(data);
-    dispatch({ type: "CHANNEL_VIDEOS_SUCCESS", payload: data.items });
+    dispatch({
+      type: "CHANNEL_VIDEOS_SUCCESS",
+      payload: {
+        videos: data.items,
+        playlistId,
+        nextPageToken: data.nextPageToken,
+      },
+    });
   } catch (error) {
     console.log(error);
     dispatch({ type: "CHANNEL_VIDEOS_FAIL", payload: error });
+  }
+};
+
+export const getLikedVideos = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: "LIKED_VIDEOS_REQUEST" });
+    const { data } = await request("/videos", {
+      params: {
+        part: "snippet,contentDetails,statistics",
+        myRating: "like",
+        maxResults: 20,
+        pageToken: getState().likedVideos.nextPageToken,
+      },
+      headers: {
+        Authorization: `Bearer ${getState().auth.accessToken}`,
+      },
+    });
+    console.log(data);
+    dispatch({
+      type: "LIKED_VIDEOS_SUCCESS",
+      payload: {
+        videos: data.items,
+        nextPageToken: data.nextPageToken,
+        totalResults: data.pageInfo.totalResults,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "LIKED_VIDEOS_FAIL", payload: error });
+  }
+};
+
+export const getVideoRating = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: "VIDEO_RATING_REQUEST" });
+    const { data } = await request("/videos/getRating", {
+      params: {
+        id,
+      },
+      headers: {
+        Authorization: `Bearer ${getState().auth.accessToken}`,
+      },
+    });
+    dispatch({
+      type: "VIDEO_RATING_SUCCESS",
+      payload: {
+        rating: data.items,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "VIDEO_RATING_FAIL", payload: error });
+  }
+};
+
+export const rateVideo = (id, rating) => async (dispatch, getState) => {
+  try {
+    await request.post("/videos/rate", { id : id, rating : rating}, {
+      params: {
+        id,
+        rating,
+      },
+      headers: {
+        Authorization: `Bearer ${getState().auth.accessToken}`,
+      },
+    });
+    dispatch({type: "RATE_VIDEO_SUCCESS"});
+    setTimeout(() => {
+      dispatch(getVideoRating(id));
+    }, 1000);
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "RATE_VIDEO_FAIL", payload: error });
   }
 };

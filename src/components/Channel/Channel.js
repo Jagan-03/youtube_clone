@@ -6,20 +6,36 @@ import { getChannelDetails } from "../../actions/channel";
 import VideoCard from "../VideosSection/VideoCard/VideoCard";
 
 import "./channel.css";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import numeral from "numeral";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Channel = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
   React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
+
+  React.useEffect(() => {
     dispatch(getVideosByChannel(id));
     dispatch(getChannelDetails(id));
   }, [dispatch, id]);
-
-  const { loading, videos } = useSelector((state) => state.channelVideos);
+  
+  const [hasMore, setHasMore] = React.useState(true);
+  const { loading, videos, nextPageToken } = useSelector((state) => state.channelVideos);
   const { channel } = useSelector((state) => state.channelDetails);
+  
+  React.useEffect(() => {
+    if(nextPageToken === undefined) setHasMore(false);
+    console.log(nextPageToken);
+    console.log(hasMore);
+  }, [nextPageToken, hasMore])
+
+  const fetchData = () => {
+    dispatch(getVideosByChannel(id));
+  }
 
   return (
     <div className="channel">
@@ -36,10 +52,18 @@ const Channel = () => {
         </div>
       </div>
 
+      <InfiniteScroll
+            dataLength={videos.length}
+            next={() => fetchData()}
+            hasMore={hasMore}
+            loader={
+              <CircularProgress /> 
+            }
+            className="videoSection_scroller"
+        >
       <div className="channel_videos">
 
-      {!loading &&
-        videos?.map((video) => (
+      {videos.map((video) => (
           <VideoCard
             key={video.snippet.resourceId.videoId}
             id={video.snippet.resourceId.videoId}
@@ -50,6 +74,7 @@ const Channel = () => {
           />
         ))}
       </div>
+      </InfiniteScroll>
     </div>
   );
 };

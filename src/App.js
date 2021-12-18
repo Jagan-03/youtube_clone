@@ -13,6 +13,7 @@ import LoginScreen from "./components/login/login";
 import WatchScreen from "./components/WatchScreen/WatchScreen";
 import Channel from "./components/Channel/Channel";
 import Subscriptions from "./components/Subscriptions/Subscriptions";
+import LikedVideos from "./components/LikedVideos/LikedVideos";
 
 const Layout = ({ children }) => {
 
@@ -46,6 +47,11 @@ function App() {
   return (
     <div className="app">
       <Switch>
+      <Route path="/feed/likedVideos">
+          <Layout>
+            <LikedVideos />
+          </Layout>
+        </Route>
       <Route path="/feed/subscriptions">
           <Layout>
             <Subscriptions />

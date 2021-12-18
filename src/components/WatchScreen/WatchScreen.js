@@ -4,7 +4,7 @@ import Comments from "../Comments/Comments";
 import VideoHorizontal from "../VideoHorizontal/VideoHorizontal";
 import VideoMetaData from "../VideoMetaData/VideoMetaData";
 import { useDispatch, useSelector } from "react-redux";
-import { getRelatedVideos, getVideoById } from "../../actions/videos";
+import { getRelatedVideos, getVideoById, getVideoRating } from "../../actions/videos";
 
 import "./watchScreen.css";
 
@@ -13,13 +13,20 @@ const WatchScreen = () => {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [])
+
+  React.useEffect(() => {
     dispatch(getVideoById(id));
+    dispatch(getVideoRating(id));
     dispatch(getRelatedVideos(id));
   }, [dispatch, id]);
 
   const { video, loading } = useSelector((state) => state.selectedVideo);
 
   const { videos, loading: relatedVideosLoading } = useSelector((state) => state.relatedVideos);
+
+  const { rating } = useSelector((state) => state.videoRating);
 
   return (
     <div className="watchScreen">
@@ -35,7 +42,7 @@ const WatchScreen = () => {
           ></iframe>
         </div>
         {!loading ? (
-          <VideoMetaData video={video} videoId={id} />
+          <VideoMetaData video={video} videoId={id} rating={rating}/>
         ) : (
           <h5>Loading...</h5>
         )}

@@ -8,6 +8,8 @@ export const login = () => async (dispatch) => {
 
     const res = await firebase.auth().signInWithPopup(provider);
 
+    console.log(res);
+
     const accessToken = res.credential.accessToken;
     const profile = {
       name: res.additionalUserInfo.profile.name,

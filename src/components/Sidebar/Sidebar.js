@@ -29,7 +29,9 @@ const Sidebar = ({ sidebar }) => {
             <SidebarRow Icon={HistoryIcon} title="History"/>
             {/* <SidebarRow Icon={OndemandVideoIcon} title="Your Videos"/> */}
             {/* <SidebarRow Icon={WatchLaterIcon} title="Watch Later"/> */}
-            <SidebarRow Icon={ThumbUpAltOutlinedIcon} title="Liked Videos"/>
+            <Link to="/feed/likedVideos">
+                <SidebarRow Icon={ThumbUpAltOutlinedIcon} title="Liked Videos"/>
+            </Link>
             <hr />
         </div>
         </div>
