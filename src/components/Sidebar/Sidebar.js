@@ -26,7 +26,9 @@ const Sidebar = ({ sidebar }) => {
             </Link>
             <hr />
             <SidebarRow Icon={VideoLibraryIcon} title="Library"/>
-            <SidebarRow Icon={HistoryIcon} title="History"/>
+            <Link to="/feed/history">
+                <SidebarRow Icon={HistoryIcon} title="History"/>
+            </Link>
             {/* <SidebarRow Icon={OndemandVideoIcon} title="Your Videos"/> */}
             {/* <SidebarRow Icon={WatchLaterIcon} title="Watch Later"/> */}
             <Link to="/feed/likedVideos">

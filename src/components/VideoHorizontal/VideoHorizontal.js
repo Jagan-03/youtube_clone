@@ -7,10 +7,13 @@ import request from "../../api";
 import moment from "moment";
 import numeral from "numeral";
 import { useHistory } from "react-router";
+import { doc, setDoc } from "firebase/firestore";
+import db from "../../firebase";
+import { useSelector } from "react-redux";
 
 const VideoHorizontal = ({video}) => {
   
-  const { id, snippet : { channelTitle, title, publishedAt, thumbnails : {medium}} } = video;
+  const { id, snippet : { channelTitle, channelId, title, publishedAt, thumbnails : {medium}} } = video;
 
   const [views, setViews] = React.useState(null);
   const [duration, setDuration] = React.useState(null);
@@ -35,9 +38,13 @@ const VideoHorizontal = ({video}) => {
   const seconds = moment.duration(duration).asSeconds();
   const _duration = moment.utc(seconds * 1000).format("mm:ss");
 
+  const { user } = useSelector(state => state.auth);
 
   const history = useHistory();
-  const handleClick = () => {
+  const handleClick = async () => {
+    const docRef = doc(db, "history", id.videoId+user.id);
+    const payload = { videoId : id.videoId, title, publishedAt, channelID: channelId, image : medium.url, userId : user.id };
+    await setDoc(docRef, payload);
     history.push(`/watch/${id.videoId}`);
   }
 

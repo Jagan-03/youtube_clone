@@ -11,7 +11,7 @@ import Avatar from "@mui/material/Avatar";
 import LogoutIcon from "@mui/icons-material/Logout";
 
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { logout } from "../../actions/auth";
 import { Divider, Icon, IconButton, ListItemIcon, Menu, MenuItem } from "@mui/material";
@@ -22,7 +22,9 @@ const Header = ({handleSidebar}) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [screenWidth, setScreenWidth] = React.useState(0);
-
+  
+  const { user } = useSelector(state => state.auth);
+  console.log(user);
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -149,7 +151,7 @@ const Header = ({handleSidebar}) => {
         <Avatar
           className="header_icons"
           alt="Remy Sharp"
-          src="/static/images/avatar/1.jpg"
+          src={user?.photoURL}
         />
         </IconButton>
         <Menu
@@ -185,7 +187,14 @@ const Header = ({handleSidebar}) => {
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
+      > 
+        <MenuItem>
+        <Avatar
+          className="header_icons"
+          alt={user?.name}
+          src={user?.photoURL}
+        /> {user?.name}
+        </MenuItem>
         <Divider />
         <MenuItem>
         <Button variant="text" onClick={handleLogout}>

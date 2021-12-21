@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import "./videocard.css";
 
 import Avatar from "@mui/material/Avatar";
@@ -7,6 +7,9 @@ import request from "../../../api";
 
 import moment from "moment";
 import numeral from "numeral";
+import { useSelector } from "react-redux";
+import { deleteDoc, doc, setDoc } from "firebase/firestore";
+import db from "../../../firebase";
 
 const VideoCard = ({
   id,
@@ -26,6 +29,7 @@ const VideoCard = ({
   const _duration = moment.utc(seconds * 1000).format("mm:ss");
 
   const history = useHistory();
+  const {pathname} = useLocation();
 
   React.useEffect(() => {
     const getVideoDetails = async () => {
@@ -59,15 +63,42 @@ const VideoCard = ({
     getChannelDetails();
   }, [channelID]);
 
-  const openWatchScreen = () => {
+  const { user } = useSelector(state => state.auth);
+  
+  const openWatchScreen = async () => {
+    const docRef = doc(db, "history", id+user.id);
+    const payload = { videoId : id, title, publishedAt, channelID, image, userId : user.id };
+    await setDoc(docRef, payload);
     history.push(`/watch/${id}`);
+  }
+
+  const removeFromHistory = async (e) => {
+    e.stopPropagation();
+    const docRef = doc(db, "history", id+user.id);
+    await deleteDoc(docRef);
   }
 
   return (
     <div className="videoCard" onClick={openWatchScreen}>
       <div className="videoCard_top">
-        <img className="videoCard_thumbnail" src={image} alt="video_thumbnai" />
+
+      {pathname === "/feed/history" ? <div
+        class="bg-image hover-overlay ripple shadow-1-strong"
+        data-mdb-ripple-color="light"
+      >
+      <img className="videoCard_thumbnail" src={image} alt="video_thumbnai" />
         <span className="videoCard_duration">{_duration}</span>
+          <div class="mask">
+          <span className="videoCard_remove" onClick={removeFromHistory}><i class="fas fa-times"></i></span>
+          </div>
+      </div> : 
+      <>
+      <img className="videoCard_thumbnail" src={image} alt="video_thumbnai" />
+        <span className="videoCard_duration">{_duration}</span>
+      </>
+      }
+            
+        
       </div>
       <div className="videoCard_info">
         <Avatar

@@ -14,6 +14,7 @@ import WatchScreen from "./components/WatchScreen/WatchScreen";
 import Channel from "./components/Channel/Channel";
 import Subscriptions from "./components/Subscriptions/Subscriptions";
 import LikedVideos from "./components/LikedVideos/LikedVideos";
+import History from "./components/History/History";
 
 const Layout = ({ children }) => {
 
@@ -47,6 +48,11 @@ function App() {
   return (
     <div className="app">
       <Switch>
+      <Route path="/feed/history">
+          <Layout>
+            <History />
+          </Layout>
+        </Route>
       <Route path="/feed/likedVideos">
           <Layout>
             <LikedVideos />

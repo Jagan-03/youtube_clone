@@ -13,6 +13,7 @@ export const login = () => async (dispatch) => {
     const accessToken = res.credential.accessToken;
     const profile = {
       name: res.additionalUserInfo.profile.name,
+      id: res.additionalUserInfo.profile.id,
       photoURL: res.additionalUserInfo.profile.picture,
     };
 
