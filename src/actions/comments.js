@@ -40,7 +40,7 @@ export const addComment = (id, text) => async (dispatch, getState) => {
     dispatch({ type: "CREATE_COMMENT_SUCCESS" });
     setTimeout(() => {
       dispatch(getCommentsById(id));
-    }, 5000);
+    }, 10000);
   } catch (error) {
     console.log(error);
     dispatch({ type: "CREATE_COMMENT_FAIL", payload: error });

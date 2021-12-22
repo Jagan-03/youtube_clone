@@ -24,7 +24,7 @@ const Channel = () => {
   }, [dispatch, id]);
   
   const [hasMore, setHasMore] = React.useState(true);
-  const { loading, videos, nextPageToken } = useSelector((state) => state.channelVideos);
+  const { videos, nextPageToken } = useSelector((state) => state.channelVideos);
   const { channel } = useSelector((state) => state.channelDetails);
   
   React.useEffect(() => {

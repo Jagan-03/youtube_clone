@@ -1,5 +1,5 @@
 import React from "react";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import "./videocard.css";
 
 import Avatar from "@mui/material/Avatar";

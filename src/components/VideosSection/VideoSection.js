@@ -25,7 +25,9 @@ const VideoSection = () => {
 
   return (
     <div className="videoSection">
+    <div className="container ps-5 border-bottom mb-4">
       <h2>Recommended</h2>
+    </div>
         <InfiniteScroll
             dataLength={videos.length}
             next={() => fetchData()}

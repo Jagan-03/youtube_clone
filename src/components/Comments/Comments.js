@@ -8,16 +8,22 @@ import "./comments.css";
 
 const Comments = ({ videoId, totalComments }) => {
   const dispatch = useDispatch();
+  const comments = useSelector((state) => state.comments.comments);
 
   React.useEffect(() => {
     dispatch(getCommentsById(videoId));
   }, [dispatch, videoId]);
 
-  const comments = useSelector((state) => state.comments.comments);
+  const [_comments, setComments] = React.useState([]);
 
-  const _comments = comments?.map(
-    (comment) => comment.snippet.topLevelComment.snippet
-  );
+  React.useEffect(() => {
+    setComments(comments?.map(
+      (comment) => comment.snippet.topLevelComment.snippet
+    ));
+  }, [comments]);
+  // const _comments = comments?.map(
+  //   (comment) => comment.snippet.topLevelComment.snippet
+  // );
 
   const [text, setText] = React.useState("");
 
@@ -28,14 +34,16 @@ const Comments = ({ videoId, totalComments }) => {
     setText("");
   };
 
+  const { user } = useSelector(state => state.auth);
+
   return (
     <div className="comments">
       <p>{totalComments} Comments</p>
       <div className="comments_form">
         <Avatar
           className="header_icons"
-          alt="Remy Sharp"
-          src="/static/images/avatar/1.jpg"
+          alt={user.name}
+          src={user.photoURL}
         />
         <form onSubmit={handleComment} className="comments_form_input">
           <input

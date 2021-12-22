@@ -6,5 +6,4 @@
 .history_videos {
     display: flex; 
    flex-wrap: wrap;
-   justify-content : center;
 }

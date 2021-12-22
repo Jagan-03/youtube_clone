@@ -16,7 +16,7 @@ const Subscriptions = () => {
     dispatch(getSubscribedChannels());
   }, [dispatch]);
 
-  const { loading, channels, nextPageToken } = useSelector(
+  const { channels, nextPageToken } = useSelector(
     (state) => state.subscribedChannels
   );
 

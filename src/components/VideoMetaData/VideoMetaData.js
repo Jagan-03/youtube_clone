@@ -6,7 +6,6 @@ import Button from "@mui/material/Button";
 import ShowMoreText from "react-show-more-text";
 import { useDispatch, useSelector } from "react-redux";
 import { getChannelDetails, getSubcriptionStatus } from "../../actions/channel";
-import { IoMdThumbsUp, IoMdThumbsDown } from "react-icons/io";
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
