@@ -41,6 +41,6 @@
     margin: 1rem 0;
     font-weight: 500;
 }
-.videoMetaData_top_statistics_likes_icon {
+.videoMetaData_top_statistics_likes_icon, .videoMetaData_channelInfo_text_title {
     cursor: pointer;
 }

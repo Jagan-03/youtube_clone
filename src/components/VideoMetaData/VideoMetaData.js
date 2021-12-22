@@ -5,11 +5,12 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import ShowMoreText from "react-show-more-text";
 import { useDispatch, useSelector } from "react-redux";
-import { getChannelDetails, getSubcriptionStatus } from "../../actions/channel";
+import { getChannelDetails, getSubcriptionStatus, subscribeChannel, unsubscribeChannel } from "../../actions/channel";
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import { useHistory } from "react-router-dom";
 
 import "./videoMetaData.css";
 import { rateVideo } from "../../actions/videos";
@@ -17,7 +18,6 @@ import { rateVideo } from "../../actions/videos";
 const VideoMetaData = ({ video: { snippet, statistics }, videoId, rating}) => {
   const { channelId, channelTitle, description, title, publishedAt } = snippet;
   const { viewCount, likeCount } = statistics;
-  console.log(rating);
 
   const dispatch = useDispatch();
 
@@ -28,12 +28,17 @@ const VideoMetaData = ({ video: { snippet, statistics }, videoId, rating}) => {
 
   const { snippet: channelSnippet, statistics: channelStatistics } =
     useSelector((state) => state.channelDetails.channel);
-  const subscriptionStatus = useSelector(
-    (state) => state.channelDetails.subscriptionStatus
+  const {subscriptionStatus, subscriptionId} = useSelector(
+    (state) => state.channelDetails
   );
-
     const rate = (data) => {
       dispatch(rateVideo(videoId, data));
+    }
+
+    const history = useHistory();
+
+    const openChannel = () => {
+      history.push(`/channel/${channelId}`)
     }
 
   return (
@@ -66,7 +71,7 @@ const VideoMetaData = ({ video: { snippet, statistics }, videoId, rating}) => {
             src={channelSnippet?.thumbnails?.default?.url}
           />
           <div>
-            <h6 className="videoMetaData_channelInfo_text">{channelTitle}</h6>
+            <h6 className="videoMetaData_channelInfo_text videoMetaData_channelInfo_text_title" onClick={openChannel}>{channelTitle}</h6>
             <p className="videoMetaData_channelInfo_text">
               {numeral(channelStatistics?.subscriberCount).format("0.a")}{" "}
               Subscribers
@@ -74,9 +79,16 @@ const VideoMetaData = ({ video: { snippet, statistics }, videoId, rating}) => {
           </div>
         </div>
         <div className="videoMetaData_subscribe">
-          <Button variant="contained" color={subscriptionStatus ? "grey" : "error"}>
-            {subscriptionStatus ? "Subscribed" : "Subscribe"}
+        {subscriptionStatus ? (
+          <Button variant="contained" style={{backgroundColor : "grey"}} onClick={() => dispatch(unsubscribeChannel(subscriptionId))}>
+            Subscribed
           </Button>
+        ) : (
+          <Button variant="contained" color="error" onClick={() => dispatch(subscribeChannel(channelId))}>
+            Subscribe
+          </Button>
+        )}
+          
         </div>
       </div>
 

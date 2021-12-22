@@ -30,10 +30,64 @@ export const getSubcriptionStatus = (id) => async (dispatch, getState) => {
     });
     dispatch({
       type: "SET_SUBSCRIPTION_STATUS",
-      payload: data.items.length !== 0,
+      payload: {
+        subscriptionStatus : data.items.length !== 0,
+        subscriptionId : data?.items[0]?.id
+      },
     });
-    console.log(data);
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const subscribeChannel = (channelId) => async (dispatch, getState) => {
+  try {
+
+    const obj = {
+      "snippet": {
+        "resourceId": {
+          "kind": "youtube#channel",
+          "channelId": channelId
+        }
+      }
+    }
+
+    await request.post("/subscriptions", obj, {
+      params: {
+        part: "snippet",
+        mine: true,
+      },
+      headers: {
+        Authorization: `Bearer ${getState().auth.accessToken}`,
+      },
+    });
+    dispatch({ type: "SUBSCRIBE_CHANNEL_SUCCESS" });
+    setTimeout(() => {
+      dispatch(getSubcriptionStatus(channelId));
+    }, 1000);
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "SUBSCRIBE_CHANNEL_FAIL", payload: error });
+  }
+};
+
+export const unsubscribeChannel = (channelId) => async (dispatch, getState) => {
+  try {
+
+    await request.delete("/subscriptions", {
+      params: {
+        id : channelId,
+      },
+      headers: {
+        Authorization: `Bearer ${getState().auth.accessToken}`,
+      },
+    });
+    dispatch({ type: "UNSUBSCRIBE_CHANNEL_SUCCESS" });
+    setTimeout(() => {
+      dispatch(getSubcriptionStatus(channelId));
+    }, 1000);
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: "UNSUBSCRIBE_CHANNEL_FAIL", payload: error });
   }
 };

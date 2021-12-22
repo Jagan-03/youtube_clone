@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router";
 import { getVideosByChannel } from "../../actions/videos";
-import { getChannelDetails } from "../../actions/channel";
+import { getChannelDetails, subscribeChannel, unsubscribeChannel } from "../../actions/channel";
 import VideoCard from "../VideosSection/VideoCard/VideoCard";
 
 import "./channel.css";
@@ -26,7 +26,10 @@ const Channel = () => {
   const [hasMore, setHasMore] = React.useState(true);
   const { videos, nextPageToken } = useSelector((state) => state.channelVideos);
   const { channel } = useSelector((state) => state.channelDetails);
-  
+  const {subscriptionStatus, subscriptionId} = useSelector(
+    (state) => state.channelDetails
+  );
+
   React.useEffect(() => {
     if(nextPageToken === undefined) setHasMore(false);
     console.log(nextPageToken);
@@ -48,7 +51,15 @@ const Channel = () => {
           <h3>{channel?.snippet?.title}</h3>
           <p>{numeral(channel?.statistics?.subscriberCount).format("0.a")} subscribers</p>
         </div>
-          <Button variant="contained" color={channel?.subscriptionStatus ? "grey" : "error"}>{ channel?.subscriptionStatus ? "Subscribed" : "Subscribe"}</Button>
+        {subscriptionStatus ? (
+          <Button variant="contained" style={{backgroundColor : "grey"}} onClick={() => dispatch(unsubscribeChannel(subscriptionId))}>
+            Subscribed
+          </Button>
+        ) : (
+          <Button variant="contained" color="error" onClick={() => dispatch(subscribeChannel(id))}>
+            Subscribe
+          </Button>
+        )}
         </div>
       </div>
 

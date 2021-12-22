@@ -3,6 +3,7 @@ export const channelDetails = (
     loading: true,
     channel: {},
     subscriptionStatus: false,
+    subscriptionId: ""
   },
   action
 ) => {
@@ -14,7 +15,7 @@ export const channelDetails = (
     case "CHANNEL_DETAILS_FAIL":
       return { ...state, channel: null, loading: false, error: action.payload };
     case "SET_SUBSCRIPTION_STATUS":
-      return { ...state, subscriptionStatus: action.payload };
+      return { ...state, subscriptionStatus: action.payload.subscriptionStatus, subscriptionId: action.payload.subscriptionId };
     default:
       return state;
   }

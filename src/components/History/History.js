@@ -15,7 +15,7 @@ const History = () => {
     React.useEffect(() => {
       const db = firebase.firestore();
       // db.collection("history").where("userId", "==", user.id).get().then((snapshot) => setVideos(snapshot.docs.map(doc => doc.data())));
-      onSnapshot(db.collection("history").where("userId", "==", user.id), (snapshot) => setVideos(snapshot.docs.map( doc => doc.data())));
+      onSnapshot(db.collection("history").where("userId", "==", user.id), (snapshot) => setVideos(snapshot.docs.map( doc => doc.data()).reverse()));
     }, [user.id]);
 
   return <div className="history">
